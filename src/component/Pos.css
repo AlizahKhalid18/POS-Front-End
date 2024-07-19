@@ -1,0 +1,6 @@
+.cards{
+    overflow-y: scroll;
+    width: 50vw;
+    height: 50vh;
+    overflow-x: hidden;
+}
