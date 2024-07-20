@@ -1,35 +1,82 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
-import Card from "react-bootstrap/Card";
-import img from "../assets/productimg.webp";
 import Col from "react-bootstrap/Col";
-import { Collapse } from "antd";
+import { Collapse, Card, List, Input } from "antd";
 import "./Pos.css";
+import axios from "axios";
+import { ShoppingCartOutlined } from "@ant-design/icons";
+const { Meta } = Card;
+
+const AddToCartButton = () => {
+  return (
+    <Row>
+      <Col>Add To Cart</Col>
+      <Col>
+        {" "}
+        <ShoppingCartOutlined key="cart" />{" "}
+      </Col>
+    </Row>
+  );
+};
+
 function Pos() {
+  const [listItems, setListItem] = useState([]);
+  const [search, setSearch] = useState("");
+
+  function handleSearchChange(event) {
+    setSearch(event.target.value);
+  }
+
+  async function handleSimpleSearch() {
+    const body = {
+      search: search,
+    }
+    const result = await axios.post(
+      "http://localhost:5000/products/search",
+      body
+    );
+    setListItem(result.data.product);
+  }
+
+  async function getPageData() {
+    const products = await axios.get("http://localhost:5000/products");
+    setListItem(products.data.products);
+  }
+
+  useEffect(() => {
+    getPageData();
+  }, []);
+
   const items = [
     {
       key: "1",
       label: "Search",
       children: (
         <div>
-          <Form inline>
+          <div inline>
             <Row>
               <Col xs="auto">
-                <Form.Control
+                <Input
                   type="text"
                   placeholder="Search"
                   className=" mr-sm-2"
+                  value={search}
+                  onChange={handleSearchChange}
                 />
               </Col>
               <Col xs="auto">
-                <Button variant="info" type="submit">
-                  Submit
+                <Button
+                  onClick={handleSimpleSearch}
+                  variant="info"
+                  type="submit"
+                >
+                  Search
                 </Button>
               </Col>
             </Row>
-          </Form>
+          </div>
         </div>
       ),
     },
@@ -63,7 +110,7 @@ function Pos() {
               </Col>
               <Col xs="auto">
                 <Button variant="info" type="submit">
-                  Submit
+                  Search
                 </Button>
               </Col>
             </Row>
@@ -74,87 +121,49 @@ function Pos() {
   ];
   return (
     <div className="container-fluid">
-      <div>
+      <div className="col-8">
         <Collapse items={items} />
+        <div className="mt-5 overflow-auto overflow-x-hidden listContainter">
+          <Row className="p-3">
+            <Row>
+              <Col>
+                <h5> Products </h5>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <List
+                  grid={{
+                    gutter: 16,
+                    column: 4,
+                  }}
+                  dataSource={listItems}
+                  renderItem={(item) => (
+                    <List.Item>
+                      <Card
+                        cover={
+                          <img
+                            src={item.productImage}
+                            height={100}
+                            width={100}
+                          />
+                        }
+                        actions={[<AddToCartButton />]}
+                      >
+                        <Meta
+                          title={item.productName}
+                          description={`${item.productPrice} RS`}
+                        />
+                      </Card>
+                    </List.Item>
+                  )}
+                />
+              </Col>
+            </Row>
+          </Row>
+        </div>
       </div>
-      <div className="cards mt-5">
-        <Row>
-          <div className="col-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
-            <Card style={{ width: "18rem" }}>
-              <div className="d-flex mt-2 ms-2">
-                <Card.Img
-                  variant="top"
-                  style={{ width: "12%", borderRadius: "50%", height: "30px" }}
-                  src={img}
-                />
-                <Card.Text className="ms-3">Product Name: RP</Card.Text>
-              </div>
-              <Card.Body>
-                <Card.Text>Product Price: 500</Card.Text>
-                <Card.Text>Company: Beautybliss</Card.Text>
-                <Card.Text>Category:Foundation</Card.Text>
-                <Button variant="info">Add to Carts</Button>
-              </Card.Body>
-            </Card>
-          </div>
-          <div className="col-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
-            <Card style={{ width: "18rem" }}>
-              <div className="d-flex mt-2 ms-2">
-                <Card.Img
-                  variant="top"
-                  style={{ width: "12%", borderRadius: "50%", height: "30px" }}
-                  src={img}
-                />
-                <Card.Text className="ms-3">Product Name: RP</Card.Text>
-              </div>
-              <Card.Body>
-                <Card.Text>Product Price: 500</Card.Text>
-                <Card.Text>Company: Beautybliss</Card.Text>
-                <Card.Text>Category:Foundation</Card.Text>
-                <Button variant="info">Add to Carts</Button>
-              </Card.Body>
-            </Card>
-          </div>
-        </Row>
-        <Row className="mt-4">
-        <div className="col-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
-            <Card style={{ width: "18rem" }}>
-              <div className="d-flex mt-2 ms-2">
-                <Card.Img
-                  variant="top"
-                  style={{ width: "12%", borderRadius: "50%", height: "30px" }}
-                  src={img}
-                />
-                <Card.Text className="ms-3">Product Name: RP</Card.Text>
-              </div>
-              <Card.Body>
-                <Card.Text>Product Price: 500</Card.Text>
-                <Card.Text>Company: Beautybliss</Card.Text>
-                <Card.Text>Category:Foundation</Card.Text>
-                <Button variant="info">Add to Carts</Button>
-              </Card.Body>
-            </Card>
-          </div>
-          <div className="col-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
-            <Card style={{ width: "18rem" }}>
-              <div className="d-flex mt-2 ms-2">
-                <Card.Img
-                  variant="top"
-                  style={{ width: "12%", borderRadius: "50%", height: "30px" }}
-                  src={img}
-                />
-                <Card.Text className="ms-3">Product Name: RP</Card.Text>
-              </div>
-              <Card.Body>
-                <Card.Text>Product Price: 500</Card.Text>
-                <Card.Text>Company: Beautybliss</Card.Text>
-                <Card.Text>Category:Foundation</Card.Text>
-                <Button variant="info">Add to Carts</Button>
-              </Card.Body>
-            </Card>
-          </div>
-        </Row>
-      </div>
+      <div className="col-4"></div>
     </div>
   );
 }

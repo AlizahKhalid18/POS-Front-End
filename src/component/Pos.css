@@ -1,6 +1,9 @@
 .cards{
-    overflow-y: scroll;
-    width: 50vw;
-    height: 50vh;
+    overflow-y: auto;
     overflow-x: hidden;
 }
+.listContainter {
+    height: 60vh;
+    background-color: #e0e0e036;
+    border-radius: 5px;
+} 
