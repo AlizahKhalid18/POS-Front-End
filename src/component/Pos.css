@@ -6,4 +6,24 @@
     height: 60vh;
     background-color: #e0e0e036;
     border-radius: 5px;
-} 
+}
+.cart {
+    background-color: #e0e0e036;
+    border-radius: 10px;
+}
+
+.addToCartBtn {
+    background-color: transparent;
+    border: none;
+}
+
+.quntBtn {
+    border: none;
+    background-color:rgb(219, 219, 219);
+    border-radius: 5px;
+    height: 25px;
+}
+
+.p-0 {
+    padding: 0%;
+}
